@@ -9,21 +9,21 @@ pipeline {
     }
     stage('Build image') {
       steps {
-        sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
-        sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
+        def customblueimage = sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
+        def customgreenimage = sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
       }
     }
     stage('Push image') {
-    withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
-        def registry_url = "registry.hub.docker.com/"
-        bat "docker login -u $USER -p $PASSWORD ${registry_url}"
-        docker.withRegistry("http://${registry_url}", "dockerhub") {
-      steps {
-        sh 'docker push msdhillon/blueimage'
-        sh 'docker push msdhillon/greenimage'
-      }
-    }
-    }
+            node {
+                checkout scm
+
+                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+
+                    /* Push the container to the custom Registry */
+                    customblueimage.push()
+                  customgreenimage.push()
+                }
+            }
     }
     stage('Remove image') {
       steps {
