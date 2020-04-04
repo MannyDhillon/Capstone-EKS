@@ -24,6 +24,7 @@ pipeline {
       }
     }
     }
+    }
     stage('Remove image') {
       steps {
         sh 'docker rmi -f msdhillon/greenimage'
