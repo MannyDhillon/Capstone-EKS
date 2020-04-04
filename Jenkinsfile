@@ -18,9 +18,8 @@ pipeline {
         script {
           checkout scm 
           docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        docker.image('msdhillon/greenimage').push()
-                        
-          }           
+                        docker.image('msdhillon/blueimage').push()
+                        docker.image('msdhillon/greenimage').push()            }           
         }
       }
     }
