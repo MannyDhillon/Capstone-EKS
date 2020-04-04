@@ -14,7 +14,10 @@ pipeline {
       }
     }
     stage('Push image') {
-      withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+    withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+        def registry_url = "registry.hub.docker.com/"
+        bat "docker login -u $USER -p $PASSWORD ${registry_url}"
+        docker.withRegistry("http://${registry_url}", "dockerhub") {
       steps {
         sh 'docker push msdhillon/blueimage'
         sh 'docker push msdhillon/greenimage'
