@@ -1,4 +1,9 @@
 pipeline {
+  environment {
+    registryCredential = 'dockerhub'
+    dockerImageBlue = ''
+    dockerImageGreen = ''
+  }
   agent any
   stages {
     stage('Linting') {
@@ -10,19 +15,20 @@ pipeline {
 
     stage('Build image') {
       steps {
-        sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
-        sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
+        dockerImageBlue = sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
+        dockerImageGreen = sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
       }
     }
 
     stage('Push image') {
       steps {
-        sh 'docker push msdhillon/blueimage'
-        sh 'docker push msdhillon/greenimage'
+        docker.withRegistry( '', registryCredential ) {
+        dockerImageBlue.push()
+        dockerImageGreen.push()
       }
     }
 
-    stage('Publish image') {
+    stage('Remove image') {
       steps {
         sh 'docker rmi -f msdhillon/greenimage'
         sh 'docker rmi -f msdhillon/blueimage'
