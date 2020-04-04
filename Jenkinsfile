@@ -14,7 +14,7 @@ pipeline {
       }
     }
     stage('Push image') {
-      docker.withRegistry('https://registry-1.docker.io/v2/', 'dockerhub'){
+      docker withRegistry('https://registry-1.docker.io/v2/', 'dockerhub'){
       steps {
         sh 'docker push msdhillon/blueimage'
         sh 'docker push msdhillon/greenimage'
