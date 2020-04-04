@@ -18,16 +18,16 @@ pipeline {
         script {
           checkout scm 
           docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        sh 'docker push msdhillon/blueimage'
-                        sh 'docker push msdhillon/greenimage'
+                        sh 'docker push msdhillon/blueimage:latest'
+                        sh 'docker push msdhillon/greenimage:latest'
           }           
         }
       }
     }
     stage('Remove image') {
       steps {
-        sh 'docker rmi -f msdhillon/greenimage'
-        sh 'docker rmi -f msdhillon/blueimage'
+        sh 'docker rmi -f msdhillon/greenimage:latest'
+        sh 'docker rmi -f msdhillon/blueimage:latest'
       }
     }
   }
