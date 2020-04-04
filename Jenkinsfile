@@ -14,11 +14,12 @@ pipeline {
       }
     }
     stage('Push image') {
-      docker withRegistry('https://registry-1.docker.io/v2/', 'docker-hub-credentials')
+      docker withRegistry('https://registry-1.docker.io/v2/', 'docker-hub-credentials'){
       steps {
         sh 'docker push msdhillon/blueimage'
         sh 'docker push msdhillon/greenimage'
       }
+    }
     }
     stage('Remove image') {
       steps {
