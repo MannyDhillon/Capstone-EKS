@@ -1,9 +1,4 @@
 pipeline {
-  environment {
-    registryCredential = 'dockerhub'
-    dockerImageBlue = ''
-    dockerImageGreen = ''
-  }
   agent any
   stages {
     stage('Linting') {
@@ -12,28 +7,24 @@ pipeline {
         sh 'tidy -q -e blue-green/green/*.html'
       }
     }
-
     stage('Build image') {
       steps {
         dockerImageBlue = sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
         dockerImageGreen = sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
       }
     }
-
     stage('Push image') {
+      docker.withRegistry('https://registry-1.docker.io/v2/', 'docker-hub-credentials')
       steps {
-        docker.withRegistry( '', registryCredential ) {
-        dockerImageBlue.push()
-        dockerImageGreen.push()
+        sh 'docker push msdhillon/blueimage'
+        sh 'docker push msdhillon/greenimage'
       }
     }
-
     stage('Remove image') {
       steps {
         sh 'docker rmi -f msdhillon/greenimage'
         sh 'docker rmi -f msdhillon/blueimage'
       }
     }
-
   }
 }
