@@ -14,13 +14,13 @@ pipeline {
       }
     }
     stage('Push image') {
-      docker withRegistry('https://registry-1.docker.io/v2/', 'dockerhub'){
+      withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) 
       steps {
         sh 'docker push msdhillon/blueimage'
         sh 'docker push msdhillon/greenimage'
       }
     }
-    }
+    
     stage('Remove image') {
       steps {
         sh 'docker rmi -f msdhillon/greenimage'
