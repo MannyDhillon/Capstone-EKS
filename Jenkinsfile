@@ -17,6 +17,7 @@ pipeline {
       steps{
         script {
           checkout scm 
+          chmod a+x *
           docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         sh 'docker push msdhillon/blueimage'
                         sh 'docker push msdhillon/greenimage'
