@@ -14,15 +14,15 @@ pipeline {
       }
     }
     stage('Push image') {
-            steps {
-              checkout scm 
-
-                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub')
-                    /* Push the container to the custom Registry */
+      steps{
+        script {
+          checkout scm 
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         sh 'docker push msdhillon/blueimage'
                         sh 'docker push msdhillon/greenimage'
-                
-            }
+          }           
+        }
+      }
     }
     stage('Remove image') {
       steps {
