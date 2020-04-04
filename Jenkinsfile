@@ -9,8 +9,8 @@ pipeline {
     }
     stage('Build image') {
       steps {
-        def customblueimage = sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
-        def customgreenimage = sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
+        sh 'docker build -t msdhillon/blueimage -f blue-green/blue/Dockerfile blue-green/blue'
+        sh 'docker build -t msdhillon/greenimage -f blue-green/green/Dockerfile blue-green/green'
       }
     }
     stage('Push image') {
@@ -20,8 +20,8 @@ pipeline {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
 
                     /* Push the container to the custom Registry */
-                    customblueimage.push()
-                  customgreenimage.push()
+                        sh 'docker push msdhillon/blueimage'
+                        sh 'docker push msdhillon/greenimage'
                 }
             }
     }
