@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: aws-auth
+    namespace: kube-system
+data:
+    mapRoles: |
+        - rolearn: arn:aws:iam::271712090856:role/DevOpsCapstone-Role
+          username: system:node:ip-192-168-29-139.us-west-2.compute.internal
+          groups:
+            - system:bootstrappers
+            - system:nodes
+    mapUsers: |
+        - userarn: arn:aws:iam::271712090856:user/Microservices
+          username: Microservices
+          groups:
+            - system:masters
