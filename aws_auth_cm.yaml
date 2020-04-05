@@ -5,8 +5,8 @@ metadata:
     namespace: kube-system
 data:
     mapRoles: |
-        - rolearn: arn:aws:iam::271712090856:role/DevOpsCapstone-Role
-          username: system:node:ip-192-168-29-139.us-west-2.compute.internal
+        - rolearn: arn:aws:iam::271712090856:role/eksctl-newprod-nodegroup-new-work-NodeInstanceRole-T3UO7S5522EL
+          username: system:node:{{EC2PrivateDNSName}}
           groups:
             - system:bootstrappers
             - system:nodes
